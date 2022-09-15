@@ -951,7 +951,7 @@ open(100*c,file='particula_teste.plt')
 write(100*c,*) 'Variables="X","Y","Z","Dx","Dy","Dz","t"'
 
 
-if(bifurcation) then
+if(bifurcation.or.bifshear) then
 do i=1,nfreq
 write(rea_char, '(I3)') i
 open (400*c+i,file='mag_tempo'//rea_char//'.plt')

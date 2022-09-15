@@ -57,6 +57,7 @@ open(3,file='entrada.dat')
       READ (3,508) texto,duffing
       READ (3,508) texto,beating
       READ (3,508) texto,bifurcation
+      READ (3,508) texto,bifshear
       READ (3,'(A)') texto
       READ (3,'(A)') texto
       READ (3,'(A)') texto
@@ -86,7 +87,7 @@ open(3,file='entrada.dat')
       READ(3,505) texto, C2
       READ(3,505) texto, C3
       READ(3,505) texto, C4
-      READ(3,505) texto, freqmax
+      READ(3,505) texto, bifmax
       READ(3,507) texto,posicao_campo
       READ(3,507) texto,nfreq
       READ (3,'(A)') texto

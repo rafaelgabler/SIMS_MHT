@@ -57,6 +57,10 @@ nnr=3*N*rea
 
 ! Alocando variaveis na memoria
 
+
+if(bifshear) then
+allocate(gpvetor(npast))
+end if
 allocate(trap(npast))
 allocate(X(rea,N,3))
 allocate(U(rea,N,3))
@@ -355,6 +359,8 @@ multiplofreq=0
 
 do k=2,npast
 
+! MONTANDO O CAMPO MAGNÉTICO APLICADO CONSIDERANDO A MUDANÇA DA FREQUÊNCIA A CADA PERÍODO PRÉ-DETERMINADO PELO USUÁRIO
+
 if(bifurcation) then
 tempototal(k) = tempototal(k-1) + dt_inicial 
 contfreqinteiro1=tempototal(k-1)/intervalo
@@ -362,8 +368,8 @@ contfreqinteiro2=tempototal(k)/intervalo
 if(contfreqinteiro1.ne.contfreqinteiro2) then
 multiplofreq=multiplofreq+1 
 end if
-campo(k)=sin((freqcampo+(freqmax-freqcampo)*multiplofreq)*tempototal(k)) 
-y(k)=(freqcampo + (freqmax-freqcampo)*multiplofreq)*cos((freqcampo + (freqmax-freqcampo)*multiplofreq)*tempototal(k))
+campo(k)=sin((freqcampo+(bifmax-freqcampo)*multiplofreq)*tempototal(k)) 
+y(k)=(freqcampo + (bifmax-freqcampo)*multiplofreq)*cos((freqcampo + (bifmax-freqcampo)*multiplofreq)*tempototal(k))
 else
 tempototal(k) = tempototal(k-1) + dt_inicial 
 campo(k) = sin(freqcampo*tempototal(k)) 
@@ -371,6 +377,27 @@ y(k) = freqcampo*cos(freqcampo*tempototal(k))
 end if
 
 end do
+
+
+! MONTANDO A RAMPA DE SHEAR DO CISALHAMENTO OSCILATÓRIO PARA O CASO DE DIAGRAMA DE BIFURCAÇÃO PARA GAMMA PONTO
+
+
+multiplofreq=0
+
+do k=2,npast
+
+if(bifshear) then
+tempototal(k) = tempototal(k-1) + dt_inicial 
+contfreqinteiro1=tempototal(k-1)/intervalo
+contfreqinteiro2=tempototal(k)/intervalo
+if(contfreqinteiro1.ne.contfreqinteiro2) then
+multiplofreq=multiplofreq+1 
+end if
+gpvetor(k)= shearrate + multiplofreq*((bifmax-shearrate)/nfreq) 
+end if
+
+end do
+
 multiplofreq=0
 
 print *,'******************************************************************************'
@@ -416,6 +443,8 @@ print *,'*                                                                      
 print *,'******************************************************************************'
 print *,''
 
+! Loop principal da evolução temporal
+
 do k=iter, auxiliar_continua
 
 k_real=k
@@ -423,7 +452,15 @@ k_real=k
 if(shear) then
 
 if(oscillatory) then
+
+if(bifshear) then
+shearrate=gpvetor(k)*sin(freq*dt_inicial*k)
+else
+
 shearrate=shearratei*sin(freq*dt_inicial*k)
+
+end if
+
 end if
 
 end if
@@ -817,7 +854,7 @@ call rotating_field(alpha, freqcampo*k*dt_inicial)
 else
 
 if(oscilacampo) then
- call torque_externo(alpha*campo(k*dt_inicial))
+ call torque_externo(alpha*campo(k))
 else
  call torque_externo(alpha)
 end if
@@ -944,10 +981,11 @@ write(5*rea,2024) campo(k),y(k), magtempo(1,k),magtempo(2,k),magtempo(3,k), deri
 contfreqinteiro1= ((k-1)*dt_inicial)/intervalo
 contfreqinteiro2= (k*dt_inicial)/intervalo
 
+
 if(contfreqinteiro1.ne.contfreqinteiro2) then
 multiplofreq=multiplofreq+1
-frequencia=(freqcampo+(freqmax-freqcampo)*multiplofreq)
 end if
+
 
 ! Escrever aqui na unidade certa um arquivo mag_tempo para cada frequencia
  

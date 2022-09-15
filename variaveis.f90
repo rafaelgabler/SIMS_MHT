@@ -5,8 +5,9 @@ integer i,j,k ,q,s, a,b,c,d,g
 integer N, auxper(5), auxper2(5), auxper3(5)
 integer razao, iter
 real razao2, diferenca_interpol1, diferenca_interpol2
-real diferenca, ajuda, lambda, kreal, aux_real
+real diferenca, ajuda, lambda, kreal, aux_real, bifmax
 real derivada1, derivada2, derivada3, trapezio, intervalo
+real, allocatable ::gpvetor(:)
 real, allocatable ::campo(:)
 real, allocatable :: y(:)
 real, allocatable :: trap(:)
@@ -141,7 +142,7 @@ logical inertia
 logical rotating
 logical greenkubo
 logical duffing
-logical bifurcation
+logical bifurcation, bifshear
  character(3) rea_char
  character(23) linha1
  character(20) linha2
