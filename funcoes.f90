@@ -955,7 +955,7 @@ if(bifurcation.or.bifshear) then
 do i=1,nfreq
 write(rea_char, '(I3)') i
 open (400*c+i,file='mag_tempo'//rea_char//'.plt')
-write(400*c+i,*) 'Variables="H","dH/dt","Mx","My","Mz","dMx","dMy","dMz","t"'
+write(400*c+i,*) 'Variables="H","dH/dt","Mx","My","Mz","dMx/dt","dMy/dt","dMz/dt","t"'
 end do
 end if
 
@@ -992,7 +992,7 @@ end if
 
 if(grafmag) then
 open(5*c,file='mag_tempo.plt')
-write(5*c,*)'Variables="H","dH/dt","Mx","My","Mz","dMx","dMy","dMz","t"'
+write(5*c,*)'Variables="H","dH/dt","Mx","My","Mz","dMx/dt","dMy/dt","dMz/dt","t"'
 end if
 
 if(printphi) then
