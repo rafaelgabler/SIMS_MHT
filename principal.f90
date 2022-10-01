@@ -308,7 +308,7 @@ y(k) = y(k-1) + (dt_inicial/6.0)*(k1 + 2.0*k2 + 2.0*k3 + k4)
 campo(k) = campo(k-1) + (dt_inicial/6.0)*(g1 + 2.0*g2 + 2.0*g3 + g4)
 tempototal(k) = tempototal(k-1) + dt_inicial 
 
-write(300*rea,510) tempototal(k),campo(k),y(k)
+write(300*rea,510) tempototal(k),alpha*campo(k), alpha*y(k)
 
 end do
 end if
@@ -368,8 +368,8 @@ contfreqinteiro2=tempototal(k)/intervalo
 if(contfreqinteiro1.ne.contfreqinteiro2) then
 multiplofreq=multiplofreq+1 
 end if
-campo(k)=sin((freqcampo+(bifmax-freqcampo)*multiplofreq)*tempototal(k)) 
-y(k)=(freqcampo + (bifmax-freqcampo)*multiplofreq)*cos((freqcampo + (bifmax-freqcampo)*multiplofreq)*tempototal(k))
+campo(k)=sin((freqcampo+(bifmax-freqcampo)*multiplofreq/nfreq)*tempototal(k)) 
+y(k)=(freqcampo + (bifmax-freqcampo)*multiplofreq/nfreq)*cos((freqcampo + (bifmax-freqcampo)*multiplofreq/nfreq)*tempototal(k))
 else
 tempototal(k) = tempototal(k-1) + dt_inicial 
 campo(k) = sin(freqcampo*tempototal(k)) 
@@ -976,7 +976,7 @@ derivada1=(magtempo(1,k)-magtempo(1,k-1))/dt_inicial
 derivada2=(magtempo(2,k)-magtempo(2,k-1))/dt_inicial
 derivada3=(magtempo(3,k)-magtempo(3,k-1))/dt_inicial
 
-write(5*rea,2024) campo(k),y(k), magtempo(1,k),magtempo(2,k),magtempo(3,k), derivada1, derivada2, derivada3, k*dt_inicial
+write(5*rea,2024) alpha*campo(k),alpha*y(k), magtempo(1,k),magtempo(2,k),magtempo(3,k), derivada1, derivada2, derivada3, k*dt_inicial
 
 contfreqinteiro1= ((k-1)*dt_inicial)/intervalo
 contfreqinteiro2= (k*dt_inicial)/intervalo
@@ -989,7 +989,7 @@ end if
 
 ! Escrever aqui na unidade certa um arquivo mag_tempo para cada frequencia
  
-write(400*rea+multiplofreq+1,2024) campo(k),y(k), magtempo(1,k),magtempo(2,k),magtempo(3,k), derivada1, derivada2, derivada3, k*dt_inicial
+write(400*rea+multiplofreq+1,2024) alpha*campo(k), alpha*y(k), magtempo(1,k),magtempo(2,k),magtempo(3,k), derivada1, derivada2, derivada3, k*dt_inicial
 
 end if
 
